@@ -48,7 +48,7 @@ def leaky_ReLU_derivative(z, alpha=0.01):
 # Researchers found out that huge leak (alpha = 0.2) seemed to result in better performance than small leak (alpha=0.01).
 
 def softmax_function(z):
-    exp_z = np.exp(z)
+    exp_z = np.exp(z - np.max(z))
     return exp_z / np.sum(exp_z)
 
 # Note:- Normally we subtract np.max(z) from z for numerical stability to prevent overflow in exp(z), especially when z has large values (e.g., > 100).
