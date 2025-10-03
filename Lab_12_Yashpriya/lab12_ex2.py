@@ -44,6 +44,22 @@ class CifarCnn(MnistCnn):
         # Override first conv layer in_channels to 3
         self.conv[0] = nn.Conv2d(3, self.conv[0].out_channels, kernel_size=self.conv[0].kernel_size, stride=1, padding="same")
 
+        # Recompute flatten size for FC layers using a CIFAR dummy image (bec. mnist had different flatten size).
+        with torch.no_grad():
+            dummy = torch.zeros(1, 3, 32, 32)   # 3 channels for CIFAR10
+            flatten_size = self.conv(dummy).view(1, -1).size(1)
+
+        # Rebuild FC layers to match new flatten_size
+        fc_layers = []
+        input_size = flatten_size
+        for units in fc_units:
+            fc_layers.append(nn.Linear(input_size, units))
+            fc_layers.append(nn.BatchNorm1d(units))
+            fc_layers.append(nn.ReLU())
+            input_size = units
+        fc_layers.append(nn.Linear(input_size, num_classes))
+        self.fc = nn.Sequential(*fc_layers)
+
 def build_model_optimizer_criterion(num_conv_layers=2, lr=0.001, device=None):
     model = CifarCnn(num_conv_layers=num_conv_layers).to(device)
     optimizer = optim.Adam(model.parameters(), lr=lr)
