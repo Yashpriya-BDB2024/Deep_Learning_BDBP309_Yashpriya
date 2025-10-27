@@ -8,5 +8,8 @@ Test labels shape: (10000,)
 Labels: ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
 EMNIST Dataset
+https://www.kaggle.com/datasets/crawford/emnist
+
+
 
 
