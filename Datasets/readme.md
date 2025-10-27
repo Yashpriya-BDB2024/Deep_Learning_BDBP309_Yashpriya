@@ -15,13 +15,13 @@ for split in ["train", "test"]:
     for label in label_names:
         os.makedirs(os.path.join(output_dir, split, label), exist_ok=True)
 
+# Save images
 def save_images(images, labels, split_name):
     for i in tqdm(range(len(images)), desc=f"Saving {split_name} images"):
         img = Image.fromarray(images[i])
         label = label_names[labels[i]]
         filename = f"{split_name}_{i:05d}.png"
         img.save(os.path.join(output_dir, split_name, label, filename))
-
 save_images(train_images, train_labels, "train")
 save_images(test_images, test_labels, "test")
 print("Done! Images saved to:", os.path.abspath(output_dir))
